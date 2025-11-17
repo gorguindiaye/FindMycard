@@ -1,4 +1,4 @@
-# 📱 FindMyID – Retrouvons vos pièces
+# 📱 FindMyCard – Retrouvons vos pièces
 
 ## 🔰 Introduction
 La perte d'une pièce d'identité ou d'un document officiel est une expérience frustrante et stressante. FindMyID est une application web intelligente qui facilite la déclaration, l'identification et la restitution des pièces perdues grâce à l'intelligence artificielle.
@@ -56,4 +56,5 @@ npm start
 - Prise de photo et analyse automatique des pièces retrouvées
 - Système de matching intelligent
 - Notifications en temps réel
+
 - Interface sécurisée et intuitive 
