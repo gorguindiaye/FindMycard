@@ -71,7 +71,7 @@ export interface Match {
   lost_item: LostItem;
   found_item: FoundItem;
   confidence_score: number;
-  match_criteria: string[];
+  match_criteria: string[] | Record<string, unknown>;
   status: 'pending' | 'confirmed' | 'rejected' | 'completed';
   created_at: string; // ISO datetime
   updated_at: string; // ISO datetime
@@ -80,8 +80,8 @@ export interface Match {
 export interface Notification {
   id: number;
   user: number; // User ID
-  match: Match;
-  notification_type: 'match_found' | 'match_confirmed' | 'item_returned';
+  match?: Match | null;
+  notification_type: 'match_found' | 'match_confirmed' | 'item_returned' | 'item_handed_over';
   title: string;
   message: string;
   is_read: boolean;

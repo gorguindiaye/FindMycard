@@ -4,7 +4,7 @@ import { ToastContainer } from 'react-toastify';
 import { AnimatePresence } from 'framer-motion';
 import 'react-toastify/dist/ReactToastify.css';
 
-import { AuthProvider, useAuth } from './contexts/AuthContext.tsx';
+import { AuthProvider, useAuth, UserRole } from './contexts/AuthContext.tsx';
 import Home from './pages/Home.tsx';
 import Auth from './pages/Auth.tsx';
 import Dashboard from './pages/Dashboard.tsx';
@@ -15,6 +15,7 @@ import Notifications from './pages/Notifications.tsx';
 import Search from './pages/Search.tsx';
 import Upload from './pages/Upload.tsx';
 import Admin from './pages/Admin.tsx';
+import AdminPublic from './pages/AdminPublic.tsx';
 import Layout from './components/Layout.tsx';
 import Footer from './components/Footer.tsx';
 
@@ -23,12 +24,12 @@ const PrivateRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => 
   return isAuthenticated ? <>{children}</> : <Navigate to="/auth" />;
 };
 
-const AdminRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+const RoleRoute: React.FC<{ children: React.ReactNode; allowedRoles: UserRole[] }> = ({ children, allowedRoles }) => {
   const { isAuthenticated, user } = useAuth();
   if (!isAuthenticated) {
     return <Navigate to="/auth" />;
   }
-  if (!user?.is_admin) {
+  if (!user || !allowedRoles.includes(user.role)) {
     return <Navigate to="/dashboard" />;
   }
   return <>{children}</>;
@@ -114,13 +115,23 @@ const App: React.FC = () => {
                 }
               />
               <Route
-                path="/admin"
+                path="/admin-panel"
                 element={
-                  <AdminRoute>
+                  <RoleRoute allowedRoles={['admin_plateforme']}>
                     <Layout>
                       <Admin />
                     </Layout>
-                  </AdminRoute>
+                  </RoleRoute>
+                }
+              />
+              <Route
+                path="/admin-public"
+                element={
+                  <RoleRoute allowedRoles={['admin_public']}>
+                    <Layout>
+                      <AdminPublic />
+                    </Layout>
+                  </RoleRoute>
                 }
               />
             </Routes>

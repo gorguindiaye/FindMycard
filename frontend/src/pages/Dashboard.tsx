@@ -9,7 +9,7 @@ import {
   AlertCircle
 } from 'lucide-react';
 import { motion } from 'framer-motion';
-import axios from 'axios';
+import apiService from '../services/api.ts';
 
 interface DashboardStats {
   lostItems: number;
@@ -34,21 +34,23 @@ const Dashboard: React.FC = () => {
 
   const fetchDashboardStats = async () => {
     try {
+      setLoading(true);
       const [lostResponse, foundResponse, matchesResponse, notificationsResponse] = await Promise.all([
-        axios.get('/api/lost-items/'),
-        axios.get('/api/found-items/'),
-        axios.get('/api/matches/'),
-        axios.get('/api/notifications/unread_count/'),
+        apiService.getLostItems(),
+        apiService.getFoundItems(),
+        apiService.getMatches(),
+        apiService.getUnreadNotificationsCount(),
       ]);
 
       setStats({
-        lostItems: lostResponse.data.count || 0,
-        foundItems: foundResponse.data.count || 0,
-        matches: matchesResponse.data.count || 0,
+        lostItems: (lostResponse.data.results || lostResponse.data).length || 0,
+        foundItems: (foundResponse.data.results || foundResponse.data).length || 0,
+        matches: (matchesResponse.data.results || matchesResponse.data).length || 0,
         notifications: notificationsResponse.data.unread_count || 0,
       });
     } catch (error) {
       console.error('Erreur lors du chargement des statistiques:', error);
+    } finally {
       setLoading(false);
     }
   };

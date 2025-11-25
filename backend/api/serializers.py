@@ -1,17 +1,25 @@
 from rest_framework import serializers
-from .models import DocumentType, LostItem, FoundItem, Match, Notification, CustomUser
+from .models import DocumentType, LostItem, FoundItem, Match, Notification, CustomUser, VerificationRequest
 
 class UserSerializer(serializers.ModelSerializer):
-    is_admin = serializers.SerializerMethodField()
+    is_admin_plateforme = serializers.SerializerMethodField()
+    is_admin_public = serializers.SerializerMethodField()
     is_citoyen = serializers.SerializerMethodField()
+    is_admin = serializers.SerializerMethodField()  # For backward compatibility
 
     class Meta:
         model = CustomUser
-        fields = ['id', 'username', 'email', 'first_name', 'last_name', 'role', 'is_admin', 'is_citoyen']
+        fields = ['id', 'username', 'email', 'first_name', 'last_name', 'role', 'is_admin', 'is_admin_plateforme', 'is_admin_public', 'is_citoyen']
         read_only_fields = ['id']
 
     def get_is_admin(self, obj):
         return obj.is_admin()
+
+    def get_is_admin_plateforme(self, obj):
+        return obj.is_admin_plateforme()
+
+    def get_is_admin_public(self, obj):
+        return obj.is_admin_public()
 
     def get_is_citoyen(self, obj):
         return obj.is_citoyen()
@@ -80,7 +88,7 @@ class RegisterSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
     password_confirm = serializers.CharField(write_only=True)
     role = serializers.ChoiceField(
-        choices=[('citoyen', 'Citoyen'), ('admin', 'Administrateur')],
+        choices=CustomUser.ROLE_CHOICES,
         default='citoyen',
         required=False
     )
@@ -93,11 +101,14 @@ class RegisterSerializer(serializers.ModelSerializer):
         if attrs['password'] != attrs['password_confirm']:
             raise serializers.ValidationError("Les mots de passe ne correspondent pas.")
 
-        # Validation du rôle admin - seulement les admins peuvent créer des admins
+        # Validation du rôle - prévention de l'élévation de privilèges
         request = self.context.get('request')
-        if attrs.get('role') == 'admin':
-            if not request or not request.user.is_staff:
-                raise serializers.ValidationError("Seuls les administrateurs peuvent créer des comptes administrateur.")
+        requested_role = attrs.get('role', 'citoyen')
+
+        if requested_role != 'citoyen':
+            # Seuls les admin_plateforme peuvent créer des comptes admin
+            if not request or not request.user.is_authenticated or not request.user.is_admin_plateforme():
+                raise serializers.ValidationError("Seuls les administrateurs plateforme peuvent créer des comptes administrateur.")
 
         return attrs
 
@@ -125,3 +136,26 @@ class OCRResultSerializer(serializers.Serializer):
     validation_status = serializers.ChoiceField(choices=['valid', 'suspect', 'invalid'])
     extracted_text = serializers.CharField(required=False, allow_blank=True)
     processing_time = serializers.FloatField(min_value=0.0, required=False)
+
+
+class VerificationRequestSerializer(serializers.ModelSerializer):
+    match = MatchSerializer(read_only=True)
+    match_id = serializers.IntegerField(write_only=True, required=False)
+    requested_by = UserSerializer(read_only=True)
+    assigned_to = UserSerializer(read_only=True)
+
+    class Meta:
+        model = VerificationRequest
+        fields = [
+            'id',
+            'match',
+            'match_id',
+            'requested_by',
+            'assigned_to',
+            'status',
+            'notes',
+            'decision_reason',
+            'created_at',
+            'updated_at',
+        ]
+        read_only_fields = ['id', 'requested_by', 'assigned_to', 'created_at', 'updated_at', 'status']

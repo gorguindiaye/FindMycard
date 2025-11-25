@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Users, FileText, BarChart3, Settings, Shield, AlertTriangle, CheckCircle, Trash2, UserCheck, UserX } from 'lucide-react';
 import { toast } from 'react-toastify';
-import axios from 'axios';
 import Loader from '../components/Loader.tsx';
+import apiService from '../services/api.ts';
 
-const API_BASE_URL = 'http://localhost:8000/api';
+
 
 interface AdminStats {
   total_users: number;
@@ -20,6 +20,7 @@ interface User {
   email: string;
   first_name: string;
   last_name: string;
+  role: string;
   is_active: boolean;
   is_staff: boolean;
   date_joined: string;
@@ -46,26 +47,18 @@ const Admin: React.FC = () => {
   const fetchStats = async () => {
     try {
       setLoading(true);
-      const token = localStorage.getItem('access_token');
 
-      // Fetch data from existing endpoints
-      const [usersResponse, lostResponse, foundResponse, matchesResponse] = await Promise.all([
-        axios.get(`${API_BASE_URL}/users/`, {
-          headers: token ? { Authorization: `Bearer ${token}` } : {}
-        }),
-        axios.get(`${API_BASE_URL}/lost-items/`, {
-          headers: token ? { Authorization: `Bearer ${token}` } : {}
-        }),
-        axios.get(`${API_BASE_URL}/found-items/`, {
-          headers: token ? { Authorization: `Bearer ${token}` } : {}
-        }),
-        axios.get(`${API_BASE_URL}/matches/`, {
-          headers: token ? { Authorization: `Bearer ${token}` } : {}
-        }),
+      // Fetch data from existing endpoints using apiService
+      const [usersResponse, lostResponse, foundResponse, matchesResponse, statsResponse] = await Promise.all([
+        apiService.getUsers(),
+        apiService.getLostItems(),
+        apiService.getFoundItems(),
+        apiService.getMatches(),
+        apiService.getUsers().then(() => apiService.getCurrentUser()), // For stats, we'll use user count from users endpoint
       ]);
 
       setStats({
-        total_users: usersResponse.data.count || usersResponse.data.length || 0,
+        total_users: usersResponse.data.count || usersResponse.data.results?.length || 0,
         active_users: usersResponse.data.results?.filter((u: any) => u.is_active).length || 0,
         total_lost_items: lostResponse.data.count || lostResponse.data.results?.length || 0,
         total_found_items: foundResponse.data.count || foundResponse.data.results?.length || 0,
@@ -83,10 +76,7 @@ const Admin: React.FC = () => {
   const fetchUsers = async () => {
     try {
       setLoading(true);
-      const token = localStorage.getItem('access_token');
-      const response = await axios.get(`${API_BASE_URL}/users/`, {
-        headers: token ? { Authorization: `Bearer ${token}` } : {}
-      });
+      const response = await apiService.getUsers();
       setUsers(response.data.results || response.data);
     } catch (error) {
       console.error('Erreur lors du chargement des utilisateurs:', error);
@@ -112,12 +102,7 @@ const Admin: React.FC = () => {
   const toggleUserStatus = async (userId: number, currentStatus: boolean) => {
     try {
       setActionLoading(`user-${userId}`);
-      const token = localStorage.getItem('access_token');
-      await axios.patch(`${API_BASE_URL}/users/${userId}/`, {
-        is_active: !currentStatus
-      }, {
-        headers: token ? { Authorization: `Bearer ${token}` } : {}
-      });
+      await apiService.updateUserStatus(userId, !currentStatus);
 
       // Update local state
       setUsers(users.map(user =>
@@ -140,10 +125,7 @@ const Admin: React.FC = () => {
 
     try {
       setActionLoading(`delete-${userId}`);
-      const token = localStorage.getItem('access_token');
-      await axios.delete(`${API_BASE_URL}/users/${userId}/`, {
-        headers: token ? { Authorization: `Bearer ${token}` } : {}
-      });
+      await apiService.deleteUser(userId);
 
       // Update local state
       setUsers(users.filter(user => user.id !== userId));
@@ -357,7 +339,7 @@ const Admin: React.FC = () => {
                                   )}
                                   {user.is_active ? 'Désactiver' : 'Activer'}
                                 </button>
-                                {!user.is_staff && (
+                                {user.role !== 'admin_plateforme' && (
                                   <button
                                     onClick={() => deleteUser(user.id)}
                                     disabled={actionLoading === `delete-${user.id}`}

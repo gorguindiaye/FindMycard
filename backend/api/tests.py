@@ -3,7 +3,8 @@ from django.contrib.auth.models import User
 from django.urls import reverse
 from rest_framework.test import APITestCase
 from rest_framework import status
-from .models import DocumentType, LostItem, FoundItem
+from .models import DocumentType, LostItem, FoundItem, Match, Notification, CustomUser
+from .services import MatchingService
 
 
 class AuthTests(APITestCase):
@@ -226,4 +227,91 @@ class NotificationTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertIsInstance(response.data['results'], list)
 
+
+class DeclarationToMatchingFlowTests(APITestCase):
+    """
+    End-to-end style tests to ensure a lost declaration and a found declaration
+    can be matched through the public API endpoints plus the matching pipeline.
+    """
+
+    def setUp(self):
+        self.document_type = DocumentType.objects.create(
+            name="Carte d'identité",
+            description="Carte nationale d'identité"
+        )
+        self.lost_user = CustomUser.objects.create_user(
+            username='lost_user',
+            email='lost@example.com',
+            password='pass12345',
+            role='citoyen'
+        )
+        self.finder_user = CustomUser.objects.create_user(
+            username='finder_user',
+            email='finder@example.com',
+            password='pass12345',
+            role='citoyen'
+        )
+        self.admin_user = CustomUser.objects.create_user(
+            username='admin_user',
+            email='admin@example.com',
+            password='pass12345',
+            role='admin_public'
+        )
+
+    def test_lost_and_found_flow_creates_match_and_notification(self):
+        lost_payload = {
+            'document_type_id': self.document_type.id,
+            'first_name': 'Aminata',
+            'last_name': 'Diallo',
+            'date_of_birth': '1991-06-15',
+            'document_number': 'CI-XYZ-12345',
+            'lost_date': '2024-10-01',
+            'lost_location': 'Dakar',
+            'description': 'Carte perdue à la gare',
+            'contact_phone': '771112233',
+            'contact_email': 'aminata@example.com'
+        }
+        self.client.force_authenticate(user=self.lost_user)
+        lost_response = self.client.post(reverse('lost-item-list'), lost_payload, format='json')
+        self.assertEqual(lost_response.status_code, status.HTTP_201_CREATED)
+        lost_item = LostItem.objects.get(id=lost_response.data['id'])
+
+        found_payload = {
+            'document_type_id': self.document_type.id,
+            'found_date': '2024-10-02',
+            'found_location': 'Dakar',
+            'description': 'Carte retrouvée sur le quai',
+            'contact_phone': '780000000',
+            'contact_email': 'finder@example.com'
+        }
+        self.client.force_authenticate(user=self.finder_user)
+        found_response = self.client.post(reverse('found-item-list'), found_payload, format='json')
+        self.assertEqual(found_response.status_code, status.HTTP_201_CREATED)
+        found_item = FoundItem.objects.get(id=found_response.data['id'])
+
+        # Simule la mise à jour effectuée par l'OCR puis exécute le matching
+        found_item.first_name = lost_item.first_name
+        found_item.last_name = lost_item.last_name
+        found_item.date_of_birth = lost_item.date_of_birth
+        found_item.document_number = lost_item.document_number
+        found_item.save()
+        MatchingService.find_matches(found_item)
+
+        self.assertEqual(Match.objects.count(), 1)
+        match = Match.objects.first()
+        self.assertEqual(match.lost_item_id, lost_item.id)
+        self.assertEqual(match.found_item_id, found_item.id)
+        self.assertGreater(match.confidence_score, 0.9)
+
+        notification_exists = Notification.objects.filter(
+            user=self.lost_user,
+            notification_type='match_found'
+        ).exists()
+        self.assertTrue(notification_exists)
+
+        self.client.force_authenticate(user=self.admin_user)
+        list_response = self.client.get(reverse('match-list'))
+        self.assertEqual(list_response.status_code, status.HTTP_200_OK)
+        self.assertEqual(list_response.data['count'], 1)
+        self.assertEqual(list_response.data['results'][0]['id'], match.id)
 

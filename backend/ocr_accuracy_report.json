@@ -1,0 +1,1121 @@
+{
+  "timestamp": "2025-11-25T03:41:03.762939",
+  "summary": {
+    "total_tests": 15,
+    "successful_tests": 0,
+    "success_rate": 0.0,
+    "precision_100_percent": false
+  },
+  "results": [
+    {
+      "nom_fichier": "original.jpg",
+      "valeurs_extraites": {
+        "nom": "GORGUI",
+        "prenom": "NDIAYE",
+        "date_naissance": "04/08/2003",
+        "numero_doc": "0120030804",
+        "sexe": "M",
+        "nationalite": "SENEGAL REPUBLIQUE",
+        "date_expiration": "27/11/2021",
+        "lieu_naissance": "SENEGAL REPUBLIQUE",
+        "photo_presente": true
+      },
+      "valeurs_attendues": {
+        "nom": "DUPONT",
+        "prenom": "JEAN PIERRE",
+        "date_naissance": "1985-05-15",
+        "numero_doc": "123456789012",
+        "sexe": "M",
+        "nationalite": "Française",
+        "date_expiration": "2030-05-15",
+        "lieu_naissance": "PARIS",
+        "photo_presente": true
+      },
+      "statut": "❌ Échec",
+      "differences": [
+        {
+          "champ": "nom",
+          "attendu": "DUPONT",
+          "extrait": "GORGUI",
+          "difference": "'GORGUI' != 'DUPONT'"
+        },
+        {
+          "champ": "prenom",
+          "attendu": "JEAN PIERRE",
+          "extrait": "NDIAYE",
+          "difference": "'NDIAYE' != 'JEAN PIERRE'"
+        },
+        {
+          "champ": "date_naissance",
+          "attendu": "1985-05-15",
+          "extrait": "04/08/2003",
+          "difference": "'04/08/2003' != '1985-05-15'"
+        },
+        {
+          "champ": "numero_doc",
+          "attendu": "123456789012",
+          "extrait": "0120030804",
+          "difference": "'0120030804' != '123456789012'"
+        },
+        {
+          "champ": "nationalite",
+          "attendu": "Française",
+          "extrait": "SENEGAL REPUBLIQUE",
+          "difference": "'SENEGAL REPUBLIQUE' != 'Française'"
+        },
+        {
+          "champ": "date_expiration",
+          "attendu": "2030-05-15",
+          "extrait": "27/11/2021",
+          "difference": "'27/11/2021' != '2030-05-15'"
+        },
+        {
+          "champ": "lieu_naissance",
+          "attendu": "PARIS",
+          "extrait": "SENEGAL REPUBLIQUE",
+          "difference": "'SENEGAL REPUBLIQUE' != 'PARIS'"
+        }
+      ],
+      "temps_traitement": 21.74,
+      "confiance_ocr": 1.0
+    },
+    {
+      "nom_fichier": "rotated_15.jpg",
+      "valeurs_extraites": {
+        "nom": "E GORGUI",
+        "prenom": "NDIAYE D",
+        "date_naissance": "04/08/2003",
+        "numero_doc": "0120030804",
+        "sexe": "M",
+        "nationalite": "",
+        "date_expiration": "27/11/2021",
+        "lieu_naissance": "",
+        "photo_presente": true
+      },
+      "valeurs_attendues": {
+        "nom": "DUPONT",
+        "prenom": "JEAN PIERRE",
+        "date_naissance": "1985-05-15",
+        "num_document": "123456789012",
+        "sexe": "M",
+        "nationalite": "Française",
+        "date_expiration": "2030-05-15",
+        "lieu_naissance": "PARIS",
+        "photo_presente": true
+      },
+      "statut": "❌ Échec",
+      "differences": [
+        {
+          "champ": "nom",
+          "attendu": "DUPONT",
+          "extrait": "E GORGUI",
+          "difference": "'E GORGUI' != 'DUPONT'"
+        },
+        {
+          "champ": "prenom",
+          "attendu": "JEAN PIERRE",
+          "extrait": "NDIAYE D",
+          "difference": "'NDIAYE D' != 'JEAN PIERRE'"
+        },
+        {
+          "champ": "date_naissance",
+          "attendu": "1985-05-15",
+          "extrait": "04/08/2003",
+          "difference": "'04/08/2003' != '1985-05-15'"
+        },
+        {
+          "champ": "num_document",
+          "attendu": "123456789012",
+          "extrait": "",
+          "difference": "'' != '123456789012'"
+        },
+        {
+          "champ": "nationalite",
+          "attendu": "Française",
+          "extrait": "",
+          "difference": "'' != 'Française'"
+        },
+        {
+          "champ": "date_expiration",
+          "attendu": "2030-05-15",
+          "extrait": "27/11/2021",
+          "difference": "'27/11/2021' != '2030-05-15'"
+        },
+        {
+          "champ": "lieu_naissance",
+          "attendu": "PARIS",
+          "extrait": "",
+          "difference": "'' != 'PARIS'"
+        }
+      ],
+      "temps_traitement": 13.93,
+      "confiance_ocr": 0.7777777777777778
+    },
+    {
+      "nom_fichier": "noisy.jpg",
+      "valeurs_extraites": {
+        "nom": "GORGUI",
+        "prenom": "NDIAYE",
+        "date_naissance": "04/08/2003",
+        "numero_doc": "0120030804",
+        "sexe": "M",
+        "nationalite": "REPUBLIQUE DU S SENEGAL D'IDENTITE CEDEAO",
+        "date_expiration": "27/11/2021",
+        "lieu_naissance": "REPUBLIQUE DU S SENEGAL D'IDENTITE CEDEAO",
+        "photo_presente": true
+      },
+      "valeurs_attendues": {
+        "nom": "DUPONT",
+        "prenom": "JEAN PIERRE",
+        "date_naissance": "1985-05-15",
+        "num_document": "123456789012",
+        "sexe": "M",
+        "nationalite": "Française",
+        "date_expiration": "2030-05-15",
+        "lieu_naissance": "PARIS",
+        "photo_presente": true
+      },
+      "statut": "❌ Échec",
+      "differences": [
+        {
+          "champ": "nom",
+          "attendu": "DUPONT",
+          "extrait": "GORGUI",
+          "difference": "'GORGUI' != 'DUPONT'"
+        },
+        {
+          "champ": "prenom",
+          "attendu": "JEAN PIERRE",
+          "extrait": "NDIAYE",
+          "difference": "'NDIAYE' != 'JEAN PIERRE'"
+        },
+        {
+          "champ": "date_naissance",
+          "attendu": "1985-05-15",
+          "extrait": "04/08/2003",
+          "difference": "'04/08/2003' != '1985-05-15'"
+        },
+        {
+          "champ": "num_document",
+          "attendu": "123456789012",
+          "extrait": "",
+          "difference": "'' != '123456789012'"
+        },
+        {
+          "champ": "nationalite",
+          "attendu": "Française",
+          "extrait": "REPUBLIQUE DU S SENEGAL D'IDENTITE CEDEAO",
+          "difference": "'REPUBLIQUE DU S SENEGAL D'IDENTITE CEDEAO' != 'Française'"
+        },
+        {
+          "champ": "date_expiration",
+          "attendu": "2030-05-15",
+          "extrait": "27/11/2021",
+          "difference": "'27/11/2021' != '2030-05-15'"
+        },
+        {
+          "champ": "lieu_naissance",
+          "attendu": "PARIS",
+          "extrait": "REPUBLIQUE DU S SENEGAL D'IDENTITE CEDEAO",
+          "difference": "'REPUBLIQUE DU S SENEGAL D'IDENTITE CEDEAO' != 'PARIS'"
+        }
+      ],
+      "temps_traitement": 12.96,
+      "confiance_ocr": 1.0
+    },
+    {
+      "nom_fichier": "blurry.jpg",
+      "valeurs_extraites": {
+        "nom": "GORGUI NDIAYE",
+        "prenom": "RUFISQUE",
+        "date_naissance": "04/08/2003",
+        "numero_doc": "0120030804",
+        "sexe": "",
+        "nationalite": "E DU SENEGAL REPUBLIQUE",
+        "date_expiration": "27/11/2021",
+        "lieu_naissance": "E DU SENEGAL REPUBLIQUE",
+        "photo_presente": true
+      },
+      "valeurs_attendues": {
+        "nom": "DUPONT",
+        "prenom": "JEAN PIERRE",
+        "date_naissance": "1985-05-15",
+        "num_document": "123456789012",
+        "sexe": "M",
+        "nationalite": "Française",
+        "date_expiration": "2030-05-15",
+        "lieu_naissance": "PARIS",
+        "photo_presente": true
+      },
+      "statut": "❌ Échec",
+      "differences": [
+        {
+          "champ": "nom",
+          "attendu": "DUPONT",
+          "extrait": "GORGUI NDIAYE",
+          "difference": "'GORGUI NDIAYE' != 'DUPONT'"
+        },
+        {
+          "champ": "prenom",
+          "attendu": "JEAN PIERRE",
+          "extrait": "RUFISQUE",
+          "difference": "'RUFISQUE' != 'JEAN PIERRE'"
+        },
+        {
+          "champ": "date_naissance",
+          "attendu": "1985-05-15",
+          "extrait": "04/08/2003",
+          "difference": "'04/08/2003' != '1985-05-15'"
+        },
+        {
+          "champ": "num_document",
+          "attendu": "123456789012",
+          "extrait": "",
+          "difference": "'' != '123456789012'"
+        },
+        {
+          "champ": "sexe",
+          "attendu": "M",
+          "extrait": "",
+          "difference": "'' != 'M'"
+        },
+        {
+          "champ": "nationalite",
+          "attendu": "Française",
+          "extrait": "E DU SENEGAL REPUBLIQUE",
+          "difference": "'E DU SENEGAL REPUBLIQUE' != 'Française'"
+        },
+        {
+          "champ": "date_expiration",
+          "attendu": "2030-05-15",
+          "extrait": "27/11/2021",
+          "difference": "'27/11/2021' != '2030-05-15'"
+        },
+        {
+          "champ": "lieu_naissance",
+          "attendu": "PARIS",
+          "extrait": "E DU SENEGAL REPUBLIQUE",
+          "difference": "'E DU SENEGAL REPUBLIQUE' != 'PARIS'"
+        }
+      ],
+      "temps_traitement": 12.41,
+      "confiance_ocr": 0.8888888888888888
+    },
+    {
+      "nom_fichier": "dark.jpg",
+      "valeurs_extraites": {
+        "nom": "A GORGUI",
+        "prenom": "NDIAYE DIDE DE NASSANCE",
+        "date_naissance": "04/08/2003",
+        "numero_doc": "0120030804",
+        "sexe": "M",
+        "nationalite": "",
+        "date_expiration": "27/11/2021",
+        "lieu_naissance": "",
+        "photo_presente": true
+      },
+      "valeurs_attendues": {
+        "nom": "DUPONT",
+        "prenom": "JEAN PIERRE",
+        "date_naissance": "1985-05-15",
+        "num_document": "123456789012",
+        "sexe": "M",
+        "nationalite": "Française",
+        "date_expiration": "2030-05-15",
+        "lieu_naissance": "PARIS",
+        "photo_presente": true
+      },
+      "statut": "❌ Échec",
+      "differences": [
+        {
+          "champ": "nom",
+          "attendu": "DUPONT",
+          "extrait": "A GORGUI",
+          "difference": "'A GORGUI' != 'DUPONT'"
+        },
+        {
+          "champ": "prenom",
+          "attendu": "JEAN PIERRE",
+          "extrait": "NDIAYE DIDE DE NASSANCE",
+          "difference": "'NDIAYE DIDE DE NASSANCE' != 'JEAN PIERRE'"
+        },
+        {
+          "champ": "date_naissance",
+          "attendu": "1985-05-15",
+          "extrait": "04/08/2003",
+          "difference": "'04/08/2003' != '1985-05-15'"
+        },
+        {
+          "champ": "num_document",
+          "attendu": "123456789012",
+          "extrait": "",
+          "difference": "'' != '123456789012'"
+        },
+        {
+          "champ": "nationalite",
+          "attendu": "Française",
+          "extrait": "",
+          "difference": "'' != 'Française'"
+        },
+        {
+          "champ": "date_expiration",
+          "attendu": "2030-05-15",
+          "extrait": "27/11/2021",
+          "difference": "'27/11/2021' != '2030-05-15'"
+        },
+        {
+          "champ": "lieu_naissance",
+          "attendu": "PARIS",
+          "extrait": "",
+          "difference": "'' != 'PARIS'"
+        }
+      ],
+      "temps_traitement": 13.11,
+      "confiance_ocr": 0.7777777777777778
+    },
+    {
+      "nom_fichier": "contrast_high.jpg",
+      "valeurs_extraites": {
+        "nom": "GORGUI",
+        "prenom": "NDIAYE",
+        "date_naissance": "04/08/2003",
+        "numero_doc": "0120030804",
+        "sexe": "M",
+        "nationalite": "REPUBLIQUE DU SENEGAL",
+        "date_expiration": "27/11/2021",
+        "lieu_naissance": "REPUBLIQUE DU SENEGAL",
+        "photo_presente": true
+      },
+      "valeurs_attendues": {
+        "nom": "DUPONT",
+        "prenom": "JEAN PIERRE",
+        "date_naissance": "1985-05-15",
+        "num_document": "123456789012",
+        "sexe": "M",
+        "nationalite": "Française",
+        "date_expiration": "2030-05-15",
+        "lieu_naissance": "PARIS",
+        "photo_presente": true
+      },
+      "statut": "❌ Échec",
+      "differences": [
+        {
+          "champ": "nom",
+          "attendu": "DUPONT",
+          "extrait": "GORGUI",
+          "difference": "'GORGUI' != 'DUPONT'"
+        },
+        {
+          "champ": "prenom",
+          "attendu": "JEAN PIERRE",
+          "extrait": "NDIAYE",
+          "difference": "'NDIAYE' != 'JEAN PIERRE'"
+        },
+        {
+          "champ": "date_naissance",
+          "attendu": "1985-05-15",
+          "extrait": "04/08/2003",
+          "difference": "'04/08/2003' != '1985-05-15'"
+        },
+        {
+          "champ": "num_document",
+          "attendu": "123456789012",
+          "extrait": "",
+          "difference": "'' != '123456789012'"
+        },
+        {
+          "champ": "nationalite",
+          "attendu": "Française",
+          "extrait": "REPUBLIQUE DU SENEGAL",
+          "difference": "'REPUBLIQUE DU SENEGAL' != 'Française'"
+        },
+        {
+          "champ": "date_expiration",
+          "attendu": "2030-05-15",
+          "extrait": "27/11/2021",
+          "difference": "'27/11/2021' != '2030-05-15'"
+        },
+        {
+          "champ": "lieu_naissance",
+          "attendu": "PARIS",
+          "extrait": "REPUBLIQUE DU SENEGAL",
+          "difference": "'REPUBLIQUE DU SENEGAL' != 'PARIS'"
+        }
+      ],
+      "temps_traitement": 13.78,
+      "confiance_ocr": 1.0
+    },
+    {
+      "nom_fichier": "rotated_30.jpg",
+      "valeurs_extraites": {
+        "nom": "GORGUI",
+        "prenom": "NDIAYE",
+        "date_naissance": "04/08/2003",
+        "numero_doc": "0120030804",
+        "sexe": "M",
+        "nationalite": "",
+        "date_expiration": "26/11/2031",
+        "lieu_naissance": "SEN DU BLIQUE",
+        "photo_presente": true
+      },
+      "valeurs_attendues": {
+        "nom": "DUPONT",
+        "prenom": "JEAN PIERRE",
+        "date_naissance": "1985-05-15",
+        "num_document": "123456789012",
+        "sexe": "M",
+        "nationalite": "Française",
+        "date_expiration": "2030-05-15",
+        "lieu_naissance": "PARIS",
+        "photo_presente": true
+      },
+      "statut": "❌ Échec",
+      "differences": [
+        {
+          "champ": "nom",
+          "attendu": "DUPONT",
+          "extrait": "GORGUI",
+          "difference": "'GORGUI' != 'DUPONT'"
+        },
+        {
+          "champ": "prenom",
+          "attendu": "JEAN PIERRE",
+          "extrait": "NDIAYE",
+          "difference": "'NDIAYE' != 'JEAN PIERRE'"
+        },
+        {
+          "champ": "date_naissance",
+          "attendu": "1985-05-15",
+          "extrait": "04/08/2003",
+          "difference": "'04/08/2003' != '1985-05-15'"
+        },
+        {
+          "champ": "num_document",
+          "attendu": "123456789012",
+          "extrait": "",
+          "difference": "'' != '123456789012'"
+        },
+        {
+          "champ": "nationalite",
+          "attendu": "Française",
+          "extrait": "",
+          "difference": "'' != 'Française'"
+        },
+        {
+          "champ": "date_expiration",
+          "attendu": "2030-05-15",
+          "extrait": "26/11/2031",
+          "difference": "'26/11/2031' != '2030-05-15'"
+        },
+        {
+          "champ": "lieu_naissance",
+          "attendu": "PARIS",
+          "extrait": "SEN DU BLIQUE",
+          "difference": "'SEN DU BLIQUE' != 'PARIS'"
+        }
+      ],
+      "temps_traitement": 12.96,
+      "confiance_ocr": 0.8888888888888888
+    },
+    {
+      "nom_fichier": "small.jpg",
+      "valeurs_extraites": {
+        "nom": "GORGUI",
+        "prenom": "NDIAYE",
+        "date_naissance": "04/08/2003",
+        "numero_doc": "0120030804",
+        "sexe": "",
+        "nationalite": "SENEGA CARTE D",
+        "date_expiration": "27/11/2021",
+        "lieu_naissance": "REPUBLIQUE DU SENEGA",
+        "photo_presente": true
+      },
+      "valeurs_attendues": {
+        "nom": "DUPONT",
+        "prenom": "JEAN PIERRE",
+        "date_naissance": "1985-05-15",
+        "num_document": "123456789012",
+        "sexe": "M",
+        "nationalite": "Française",
+        "date_expiration": "2030-05-15",
+        "lieu_naissance": "PARIS",
+        "photo_presente": true
+      },
+      "statut": "❌ Échec",
+      "differences": [
+        {
+          "champ": "nom",
+          "attendu": "DUPONT",
+          "extrait": "GORGUI",
+          "difference": "'GORGUI' != 'DUPONT'"
+        },
+        {
+          "champ": "prenom",
+          "attendu": "JEAN PIERRE",
+          "extrait": "NDIAYE",
+          "difference": "'NDIAYE' != 'JEAN PIERRE'"
+        },
+        {
+          "champ": "date_naissance",
+          "attendu": "1985-05-15",
+          "extrait": "04/08/2003",
+          "difference": "'04/08/2003' != '1985-05-15'"
+        },
+        {
+          "champ": "num_document",
+          "attendu": "123456789012",
+          "extrait": "",
+          "difference": "'' != '123456789012'"
+        },
+        {
+          "champ": "sexe",
+          "attendu": "M",
+          "extrait": "",
+          "difference": "'' != 'M'"
+        },
+        {
+          "champ": "nationalite",
+          "attendu": "Française",
+          "extrait": "SENEGA CARTE D",
+          "difference": "'SENEGA CARTE D' != 'Française'"
+        },
+        {
+          "champ": "date_expiration",
+          "attendu": "2030-05-15",
+          "extrait": "27/11/2021",
+          "difference": "'27/11/2021' != '2030-05-15'"
+        },
+        {
+          "champ": "lieu_naissance",
+          "attendu": "PARIS",
+          "extrait": "REPUBLIQUE DU SENEGA",
+          "difference": "'REPUBLIQUE DU SENEGA' != 'PARIS'"
+        }
+      ],
+      "temps_traitement": 8.9,
+      "confiance_ocr": 0.8888888888888888
+    },
+    {
+      "nom_fichier": "large.jpg",
+      "valeurs_extraites": {
+        "nom": "GORGUI",
+        "prenom": "NDIAYE",
+        "date_naissance": "04/08/2003",
+        "numero_doc": "0120030804",
+        "sexe": "M",
+        "nationalite": "REPUBLIQUE DU SENEGAL",
+        "date_expiration": "27/11/2021",
+        "lieu_naissance": "REPUBLIQUE DU SENEGAL",
+        "photo_presente": true
+      },
+      "valeurs_attendues": {
+        "nom": "DUPONT",
+        "prenom": "JEAN PIERRE",
+        "date_naissance": "1985-05-15",
+        "num_document": "123456789012",
+        "sexe": "M",
+        "nationalite": "Française",
+        "date_expiration": "2030-05-15",
+        "lieu_naissance": "PARIS",
+        "photo_presente": true
+      },
+      "statut": "❌ Échec",
+      "differences": [
+        {
+          "champ": "nom",
+          "attendu": "DUPONT",
+          "extrait": "GORGUI",
+          "difference": "'GORGUI' != 'DUPONT'"
+        },
+        {
+          "champ": "prenom",
+          "attendu": "JEAN PIERRE",
+          "extrait": "NDIAYE",
+          "difference": "'NDIAYE' != 'JEAN PIERRE'"
+        },
+        {
+          "champ": "date_naissance",
+          "attendu": "1985-05-15",
+          "extrait": "04/08/2003",
+          "difference": "'04/08/2003' != '1985-05-15'"
+        },
+        {
+          "champ": "num_document",
+          "attendu": "123456789012",
+          "extrait": "",
+          "difference": "'' != '123456789012'"
+        },
+        {
+          "champ": "nationalite",
+          "attendu": "Française",
+          "extrait": "REPUBLIQUE DU SENEGAL",
+          "difference": "'REPUBLIQUE DU SENEGAL' != 'Française'"
+        },
+        {
+          "champ": "date_expiration",
+          "attendu": "2030-05-15",
+          "extrait": "27/11/2021",
+          "difference": "'27/11/2021' != '2030-05-15'"
+        },
+        {
+          "champ": "lieu_naissance",
+          "attendu": "PARIS",
+          "extrait": "REPUBLIQUE DU SENEGAL",
+          "difference": "'REPUBLIQUE DU SENEGAL' != 'PARIS'"
+        }
+      ],
+      "temps_traitement": 66.9,
+      "confiance_ocr": 1.0
+    },
+    {
+      "nom_fichier": "mixed_case.jpg",
+      "valeurs_extraites": {
+        "nom": "GORGUI",
+        "prenom": "NDIAYE",
+        "date_naissance": "04/08/2003",
+        "numero_doc": "0120030804",
+        "sexe": "M",
+        "nationalite": "SENEGAL REPUBLIQUE",
+        "date_expiration": "27/11/2021",
+        "lieu_naissance": "SENEGAL REPUBLIQUE",
+        "photo_presente": true
+      },
+      "valeurs_attendues": {
+        "nom": "Dupont",
+        "prenom": "Jean Pierre",
+        "date_naissance": "1985-05-15",
+        "num_document": "123456789012",
+        "sexe": "M",
+        "nationalite": "Française",
+        "date_expiration": "2030-05-15",
+        "lieu_naissance": "Paris",
+        "photo_presente": true
+      },
+      "statut": "❌ Échec",
+      "differences": [
+        {
+          "champ": "nom",
+          "attendu": "Dupont",
+          "extrait": "GORGUI",
+          "difference": "'GORGUI' != 'Dupont'"
+        },
+        {
+          "champ": "prenom",
+          "attendu": "Jean Pierre",
+          "extrait": "NDIAYE",
+          "difference": "'NDIAYE' != 'Jean Pierre'"
+        },
+        {
+          "champ": "date_naissance",
+          "attendu": "1985-05-15",
+          "extrait": "04/08/2003",
+          "difference": "'04/08/2003' != '1985-05-15'"
+        },
+        {
+          "champ": "num_document",
+          "attendu": "123456789012",
+          "extrait": "",
+          "difference": "'' != '123456789012'"
+        },
+        {
+          "champ": "nationalite",
+          "attendu": "Française",
+          "extrait": "SENEGAL REPUBLIQUE",
+          "difference": "'SENEGAL REPUBLIQUE' != 'Française'"
+        },
+        {
+          "champ": "date_expiration",
+          "attendu": "2030-05-15",
+          "extrait": "27/11/2021",
+          "difference": "'27/11/2021' != '2030-05-15'"
+        },
+        {
+          "champ": "lieu_naissance",
+          "attendu": "Paris",
+          "extrait": "SENEGAL REPUBLIQUE",
+          "difference": "'SENEGAL REPUBLIQUE' != 'Paris'"
+        }
+      ],
+      "temps_traitement": 16.34,
+      "confiance_ocr": 1.0
+    },
+    {
+      "nom_fichier": "accents.jpg",
+      "valeurs_extraites": {
+        "nom": "GORGUI",
+        "prenom": "NDIAYE",
+        "date_naissance": "04/08/2003",
+        "numero_doc": "0120030804",
+        "sexe": "M",
+        "nationalite": "SENEGAL REPUBLIQUE",
+        "date_expiration": "27/11/2021",
+        "lieu_naissance": "SENEGAL REPUBLIQUE",
+        "photo_presente": true
+      },
+      "valeurs_attendues": {
+        "nom": "DUPÔNT",
+        "prenom": "JEÂN PIÉRRE",
+        "date_naissance": "1985-05-15",
+        "num_document": "123456789012",
+        "sexe": "M",
+        "nationalite": "Française",
+        "date_expiration": "2030-05-15",
+        "lieu_naissance": "PÂRIS",
+        "photo_presente": true
+      },
+      "statut": "❌ Échec",
+      "differences": [
+        {
+          "champ": "nom",
+          "attendu": "DUPÔNT",
+          "extrait": "GORGUI",
+          "difference": "'GORGUI' != 'DUPÔNT'"
+        },
+        {
+          "champ": "prenom",
+          "attendu": "JEÂN PIÉRRE",
+          "extrait": "NDIAYE",
+          "difference": "'NDIAYE' != 'JEÂN PIÉRRE'"
+        },
+        {
+          "champ": "date_naissance",
+          "attendu": "1985-05-15",
+          "extrait": "04/08/2003",
+          "difference": "'04/08/2003' != '1985-05-15'"
+        },
+        {
+          "champ": "num_document",
+          "attendu": "123456789012",
+          "extrait": "",
+          "difference": "'' != '123456789012'"
+        },
+        {
+          "champ": "nationalite",
+          "attendu": "Française",
+          "extrait": "SENEGAL REPUBLIQUE",
+          "difference": "'SENEGAL REPUBLIQUE' != 'Française'"
+        },
+        {
+          "champ": "date_expiration",
+          "attendu": "2030-05-15",
+          "extrait": "27/11/2021",
+          "difference": "'27/11/2021' != '2030-05-15'"
+        },
+        {
+          "champ": "lieu_naissance",
+          "attendu": "PÂRIS",
+          "extrait": "SENEGAL REPUBLIQUE",
+          "difference": "'SENEGAL REPUBLIQUE' != 'PÂRIS'"
+        }
+      ],
+      "temps_traitement": 12.74,
+      "confiance_ocr": 1.0
+    },
+    {
+      "nom_fichier": "o_zero_confusion.jpg",
+      "valeurs_extraites": {
+        "nom": "GORGUI",
+        "prenom": "NDIAYE",
+        "date_naissance": "04/08/2003",
+        "numero_doc": "0120030804",
+        "sexe": "M",
+        "nationalite": "SENEGAL REPUBLIQUE",
+        "date_expiration": "27/11/2021",
+        "lieu_naissance": "SENEGAL REPUBLIQUE",
+        "photo_presente": true
+      },
+      "valeurs_attendues": {
+        "nom": "DUPONT",
+        "prenom": "JEAN PIERRE",
+        "date_naissance": "1985-05-15",
+        "num_document": "12345678901O",
+        "sexe": "M",
+        "nationalite": "Française",
+        "date_expiration": "2030-05-15",
+        "lieu_naissance": "PARIS",
+        "photo_presente": true
+      },
+      "statut": "❌ Échec",
+      "differences": [
+        {
+          "champ": "nom",
+          "attendu": "DUPONT",
+          "extrait": "GORGUI",
+          "difference": "'GORGUI' != 'DUPONT'"
+        },
+        {
+          "champ": "prenom",
+          "attendu": "JEAN PIERRE",
+          "extrait": "NDIAYE",
+          "difference": "'NDIAYE' != 'JEAN PIERRE'"
+        },
+        {
+          "champ": "date_naissance",
+          "attendu": "1985-05-15",
+          "extrait": "04/08/2003",
+          "difference": "'04/08/2003' != '1985-05-15'"
+        },
+        {
+          "champ": "num_document",
+          "attendu": "12345678901O",
+          "extrait": "",
+          "difference": "'' != '12345678901O'"
+        },
+        {
+          "champ": "nationalite",
+          "attendu": "Française",
+          "extrait": "SENEGAL REPUBLIQUE",
+          "difference": "'SENEGAL REPUBLIQUE' != 'Française'"
+        },
+        {
+          "champ": "date_expiration",
+          "attendu": "2030-05-15",
+          "extrait": "27/11/2021",
+          "difference": "'27/11/2021' != '2030-05-15'"
+        },
+        {
+          "champ": "lieu_naissance",
+          "attendu": "PARIS",
+          "extrait": "SENEGAL REPUBLIQUE",
+          "difference": "'SENEGAL REPUBLIQUE' != 'PARIS'"
+        }
+      ],
+      "temps_traitement": 12.94,
+      "confiance_ocr": 1.0
+    },
+    {
+      "nom_fichier": "partial_occlusion.jpg",
+      "valeurs_extraites": {
+        "nom": "RUFISQUE DELIMANCE",
+        "prenom": "AINOU?ADY RUFISQUE",
+        "date_naissance": "04/08/2003",
+        "numero_doc": "",
+        "sexe": "",
+        "nationalite": "SENEGAL",
+        "date_expiration": "27/11/2021",
+        "lieu_naissance": "SENEGAL",
+        "photo_presente": true
+      },
+      "valeurs_attendues": {
+        "nom": "DUPONT",
+        "prenom": "JEAN PIERRE",
+        "date_naissance": "1985-05-15",
+        "num_document": "123456789012",
+        "sexe": "M",
+        "nationalite": "Française",
+        "date_expiration": "2030-05-15",
+        "lieu_naissance": "PARIS",
+        "photo_presente": false
+      },
+      "statut": "❌ Échec",
+      "differences": [
+        {
+          "champ": "nom",
+          "attendu": "DUPONT",
+          "extrait": "RUFISQUE DELIMANCE",
+          "difference": "'RUFISQUE DELIMANCE' != 'DUPONT'"
+        },
+        {
+          "champ": "prenom",
+          "attendu": "JEAN PIERRE",
+          "extrait": "AINOU?ADY RUFISQUE",
+          "difference": "'AINOU?ADY RUFISQUE' != 'JEAN PIERRE'"
+        },
+        {
+          "champ": "date_naissance",
+          "attendu": "1985-05-15",
+          "extrait": "04/08/2003",
+          "difference": "'04/08/2003' != '1985-05-15'"
+        },
+        {
+          "champ": "num_document",
+          "attendu": "123456789012",
+          "extrait": "",
+          "difference": "'' != '123456789012'"
+        },
+        {
+          "champ": "sexe",
+          "attendu": "M",
+          "extrait": "",
+          "difference": "'' != 'M'"
+        },
+        {
+          "champ": "nationalite",
+          "attendu": "Française",
+          "extrait": "SENEGAL",
+          "difference": "'SENEGAL' != 'Française'"
+        },
+        {
+          "champ": "date_expiration",
+          "attendu": "2030-05-15",
+          "extrait": "27/11/2021",
+          "difference": "'27/11/2021' != '2030-05-15'"
+        },
+        {
+          "champ": "lieu_naissance",
+          "attendu": "PARIS",
+          "extrait": "SENEGAL",
+          "difference": "'SENEGAL' != 'PARIS'"
+        },
+        {
+          "champ": "photo_presente",
+          "attendu": false,
+          "extrait": true,
+          "difference": "'True' != 'False'"
+        }
+      ],
+      "temps_traitement": 13.14,
+      "confiance_ocr": 0.7777777777777778
+    },
+    {
+      "nom_fichier": "low_quality.jpg",
+      "valeurs_extraites": {
+        "nom": "GORGUI NDIAYE",
+        "prenom": "AINOU?ADY RUFISQUE",
+        "date_naissance": "04/08/2003",
+        "numero_doc": "0120030804",
+        "sexe": "",
+        "nationalite": "",
+        "date_expiration": "1/1/2091",
+        "lieu_naissance": "UFIBQUE",
+        "photo_presente": true
+      },
+      "valeurs_attendues": {
+        "nom": "DUPONT",
+        "prenom": "JEAN PIERRE",
+        "date_naissance": "1985-05-15",
+        "num_document": "123456789012",
+        "sexe": "M",
+        "nationalite": "Française",
+        "date_expiration": "2030-05-15",
+        "lieu_naissance": "PARIS",
+        "photo_presente": true
+      },
+      "statut": "❌ Échec",
+      "differences": [
+        {
+          "champ": "nom",
+          "attendu": "DUPONT",
+          "extrait": "GORGUI NDIAYE",
+          "difference": "'GORGUI NDIAYE' != 'DUPONT'"
+        },
+        {
+          "champ": "prenom",
+          "attendu": "JEAN PIERRE",
+          "extrait": "AINOU?ADY RUFISQUE",
+          "difference": "'AINOU?ADY RUFISQUE' != 'JEAN PIERRE'"
+        },
+        {
+          "champ": "date_naissance",
+          "attendu": "1985-05-15",
+          "extrait": "04/08/2003",
+          "difference": "'04/08/2003' != '1985-05-15'"
+        },
+        {
+          "champ": "num_document",
+          "attendu": "123456789012",
+          "extrait": "",
+          "difference": "'' != '123456789012'"
+        },
+        {
+          "champ": "sexe",
+          "attendu": "M",
+          "extrait": "",
+          "difference": "'' != 'M'"
+        },
+        {
+          "champ": "nationalite",
+          "attendu": "Française",
+          "extrait": "",
+          "difference": "'' != 'Française'"
+        },
+        {
+          "champ": "date_expiration",
+          "attendu": "2030-05-15",
+          "extrait": "1/1/2091",
+          "difference": "'1/1/2091' != '2030-05-15'"
+        },
+        {
+          "champ": "lieu_naissance",
+          "attendu": "PARIS",
+          "extrait": "UFIBQUE",
+          "difference": "'UFIBQUE' != 'PARIS'"
+        }
+      ],
+      "temps_traitement": 6.0,
+      "confiance_ocr": 0.7777777777777778
+    },
+    {
+      "nom_fichier": "inverted_colors.jpg",
+      "valeurs_extraites": {
+        "nom": "GORGUI",
+        "prenom": "NDIAYE",
+        "date_naissance": "04/08/2003",
+        "numero_doc": "0120030804",
+        "sexe": "M",
+        "nationalite": "SENEGAL REPUBLIQUE",
+        "date_expiration": "26/11/2031",
+        "lieu_naissance": "SENEGAL REPUBLIQUE",
+        "photo_presente": true
+      },
+      "valeurs_attendues": {
+        "nom": "DUPONT",
+        "prenom": "JEAN PIERRE",
+        "date_naissance": "1985-05-15",
+        "num_document": "123456789012",
+        "sexe": "M",
+        "nationalite": "Française",
+        "date_expiration": "2030-05-15",
+        "lieu_naissance": "PARIS",
+        "photo_presente": true
+      },
+      "statut": "❌ Échec",
+      "differences": [
+        {
+          "champ": "nom",
+          "attendu": "DUPONT",
+          "extrait": "GORGUI",
+          "difference": "'GORGUI' != 'DUPONT'"
+        },
+        {
+          "champ": "prenom",
+          "attendu": "JEAN PIERRE",
+          "extrait": "NDIAYE",
+          "difference": "'NDIAYE' != 'JEAN PIERRE'"
+        },
+        {
+          "champ": "date_naissance",
+          "attendu": "1985-05-15",
+          "extrait": "04/08/2003",
+          "difference": "'04/08/2003' != '1985-05-15'"
+        },
+        {
+          "champ": "num_document",
+          "attendu": "123456789012",
+          "extrait": "",
+          "difference": "'' != '123456789012'"
+        },
+        {
+          "champ": "nationalite",
+          "attendu": "Française",
+          "extrait": "SENEGAL REPUBLIQUE",
+          "difference": "'SENEGAL REPUBLIQUE' != 'Française'"
+        },
+        {
+          "champ": "date_expiration",
+          "attendu": "2030-05-15",
+          "extrait": "26/11/2031",
+          "difference": "'26/11/2031' != '2030-05-15'"
+        },
+        {
+          "champ": "lieu_naissance",
+          "attendu": "PARIS",
+          "extrait": "SENEGAL REPUBLIQUE",
+          "difference": "'SENEGAL REPUBLIQUE' != 'PARIS'"
+        }
+      ],
+      "temps_traitement": 13.11,
+      "confiance_ocr": 1.0
+    }
+  ]
+}

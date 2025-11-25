@@ -6,8 +6,15 @@ class CustomUser(AbstractUser):
     """Modèle User personnalisé avec gestion des rôles"""
     ROLE_CHOICES = [
         ('citoyen', 'Citoyen'),
-        ('admin', 'Administrateur'),
+        ('admin_public', 'Administration Publique'),
+        ('admin_plateforme', 'Administrateur Plateforme'),
     ]
+
+    ROLE_HIERARCHY = {
+        'citoyen': 1,
+        'admin_public': 2,
+        'admin_plateforme': 3,
+    }
 
     role = models.CharField(
         max_length=20,
@@ -19,8 +26,21 @@ class CustomUser(AbstractUser):
     def is_citoyen(self):
         return self.role == 'citoyen'
 
+    def is_admin_public(self):
+        return self.role == 'admin_public'
+
+    def is_admin_plateforme(self):
+        return self.role == 'admin_plateforme'
+
     def is_admin(self):
-        return self.role == 'admin'
+        # Alias for backward compatibility, but now checks for admin_plateforme
+        return self.is_admin_plateforme()
+
+    def has_role_or_higher(self, required_role):
+        """Vérifie si l'utilisateur a le rôle requis ou un rôle supérieur dans la hiérarchie"""
+        user_level = self.ROLE_HIERARCHY.get(self.role, 0)
+        required_level = self.ROLE_HIERARCHY.get(required_role, 0)
+        return user_level >= required_level
 
     def __str__(self):
         return f"{self.username} - {self.role}"
@@ -122,6 +142,33 @@ class Match(models.Model):
     
     def __str__(self):
         return f"Match: {self.lost_item} ↔ {self.found_item}"
+
+
+class VerificationRequest(models.Model):
+    """Demandes de vérification adressées à l'administration publique"""
+    STATUS_CHOICES = [
+        ('pending', 'En attente'),
+        ('in_review', 'En cours de vérification'),
+        ('confirmed', 'Authentifié'),
+        ('rejected', 'Rejeté'),
+        ('supervised', 'Restitution supervisée'),
+    ]
+
+    match = models.ForeignKey(Match, on_delete=models.CASCADE, related_name='verification_requests')
+    requested_by = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='verification_requests_created')
+    assigned_to = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True, blank=True, related_name='verification_requests_assigned')
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
+    notes = models.TextField(blank=True)
+    decision_reason = models.TextField(blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f"VerificationRequest Match#{self.match_id} - {self.status}"
+
 
 class Notification(models.Model):
     """Notifications pour les utilisateurs"""

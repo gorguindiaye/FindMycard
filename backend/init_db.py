@@ -12,8 +12,7 @@ import django
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'findmyid.settings')
 django.setup()
 
-from django.contrib.auth.models import User
-from api.models import DocumentType
+from api.models import DocumentType, CustomUser
 
 def create_document_types():
     """Créé les types de documents supportés"""
@@ -55,19 +54,48 @@ def create_document_types():
         )
         print(f"✓ Type de document créé: {doc_type['name']}")
 
-def create_superuser():
-    """Créé un superutilisateur par défaut"""
-    if not User.objects.filter(username='admin').exists():
-        User.objects.create_superuser(
-            username='admin',
-            email='admin@findmyid.com',
-            password='admin123',
-            first_name='Admin',
-            last_name='FindMyID'
+def create_admin_accounts():
+    """Créé les comptes administrateurs plateforme et public par défaut"""
+    accounts = [
+        {
+            'email': 'admin.platform@findmycard.local',
+            'password': 'AdminPlateforme123!',
+            'first_name': 'Admin',
+            'last_name': 'Plateforme',
+            'role': 'admin_plateforme',
+            'is_superuser': True,
+            'is_staff': True,
+        },
+        {
+            'email': 'admin.public@findmycard.local',
+            'password': 'AdminPublic123!',
+            'first_name': 'Admin',
+            'last_name': 'Public',
+            'role': 'admin_public',
+            'is_superuser': False,
+            'is_staff': True,
+        },
+    ]
+
+    for account in accounts:
+        user, created = CustomUser.objects.get_or_create(
+            email=account['email'],
+            defaults={
+                'username': account['email'],
+                'first_name': account['first_name'],
+                'last_name': account['last_name'],
+                'role': account['role'],
+                'is_superuser': account['is_superuser'],
+                'is_staff': account['is_staff'],
+                'is_active': True,
+            }
         )
-        print("✓ Superutilisateur créé: admin/admin123")
-    else:
-        print("✓ Superutilisateur existe déjà")
+        if created:
+            user.set_password(account['password'])
+            user.save()
+            print(f"✓ Compte {account['role']} créé: {account['email']} / {account['password']}")
+        else:
+            print(f"✓ Compte {account['role']} existe déjà: {account['email']}")
 
 def main():
     print("🚀 Initialisation de la base de données FindMyID...")
@@ -77,15 +105,14 @@ def main():
         print("\n📋 Création des types de documents...")
         create_document_types()
         
-        # Créer le superutilisateur
-        print("\n👤 Création du superutilisateur...")
-        create_superuser()
+        # Créer les comptes admin
+        print("\n👤 Création des comptes administrateurs...")
+        create_admin_accounts()
         
         print("\n✅ Initialisation terminée avec succès!")
-        print("\n📝 Informations de connexion:")
-        print("   - URL admin: http://localhost:8000/admin/")
-        print("   - Utilisateur: admin")
-        print("   - Mot de passe: admin123")
+        print("\n📝 Informations de connexion par défaut:")
+        print("   - Admin plateforme: admin.platform@findmycard.local / AdminPlateforme123!")
+        print("   - Admin public: admin.public@findmycard.local / AdminPublic123!")
         
     except Exception as e:
         print(f"\n❌ Erreur lors de l'initialisation: {str(e)}")

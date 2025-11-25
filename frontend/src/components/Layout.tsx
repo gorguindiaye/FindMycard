@@ -22,14 +22,22 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   const location = useLocation();
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
-  const navigation = [
-    { name: 'Tableau de bord', href: '/', icon: Home },
+  const baseNavigation = [
+    { name: 'Tableau de bord', href: '/dashboard', icon: Home },
     { name: 'J\'ai perdu', href: '/lost-item', icon: Search },
     { name: 'J\'ai trouvé', href: '/found-item', icon: Camera },
     { name: 'Correspondances', href: '/matches', icon: Heart },
     { name: 'Notifications', href: '/notifications', icon: Bell },
-    ...(user?.is_admin ? [{ name: 'Administration', href: '/admin', icon: User }] : []),
   ];
+
+  const adminLinks =
+    user?.role === 'admin_plateforme'
+      ? [{ name: 'Admin Panel', href: '/admin-panel', icon: User }]
+      : user?.role === 'admin_public'
+        ? [{ name: 'Admin Public', href: '/admin-public', icon: User }]
+        : [];
+
+  const navigation = [...baseNavigation, ...adminLinks];
 
   const isActive = (path: string) => location.pathname === path;
 

@@ -44,6 +44,15 @@ Frontend (React)
 cd frontend
 npm install
 npm start
+
+### Comptes administrateurs par défaut
+
+| Rôle | Email | Mot de passe |
+| --- | --- | --- |
+| Admin plateforme | `admin.platform@findmycard.local` | `AdminPlateforme123!` |
+| Admin public | `admin.public@findmycard.local` | `AdminPublic123!` |
+
+> ⚠️ Pensez à modifier ces accès lors du passage en production.
 🔐 Fonctionnalités principales
 
 Déclaration de perte de pièces d'identité

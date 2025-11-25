@@ -1,0 +1,40 @@
+{
+  "Carte.jpg": {
+    "rules": {
+      "nom": "",
+      "prenom": "",
+      "date_naissance": "",
+      "numero_doc": "",
+      "date_expiration": "",
+      "sexe": "",
+      "nationalite": "",
+      "lieu_naissance": "",
+      "photo_present": "OUI"
+    },
+    "dl": {},
+    "differences": {},
+    "times": {
+      "rules": 21.876352310180664,
+      "dl": 0.0010004043579101562
+    }
+  },
+  "CNI1.jpg": {
+    "rules": {
+      "nom": "",
+      "prenom": "",
+      "date_naissance": "",
+      "numero_doc": "",
+      "date_expiration": "",
+      "sexe": "",
+      "nationalite": "",
+      "lieu_naissance": "",
+      "photo_present": "OUI"
+    },
+    "dl": {},
+    "differences": {},
+    "times": {
+      "rules": 1.4925031661987305,
+      "dl": 0.0009970664978027344
+    }
+  }
+}

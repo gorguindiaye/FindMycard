@@ -61,6 +61,22 @@ const Matches: React.FC = () => {
     }
   };
 
+  const renderCriteria = (criteria: Match['match_criteria']) => {
+    if (!criteria) return [];
+    if (Array.isArray(criteria)) {
+      return criteria;
+    }
+    if (typeof criteria === 'object') {
+      return Object.entries(criteria).map(([key, value]) => {
+        if (value && typeof value === 'object') {
+          return `${key}`;
+        }
+        return `${key}: ${String(value)}`;
+      });
+    }
+    return [];
+  };
+
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('fr-FR', {
       year: 'numeric',
@@ -183,11 +199,11 @@ const Matches: React.FC = () => {
                 </div>
 
                 {/* Match Criteria */}
-                {match.match_criteria.length > 0 && (
+                {renderCriteria(match.match_criteria).length > 0 && (
                   <div>
                     <h4 className="text-sm font-medium text-gray-900 mb-2">Critères de correspondance</h4>
                     <div className="flex flex-wrap gap-1">
-                      {match.match_criteria.map((criterion, index) => (
+                      {renderCriteria(match.match_criteria).map((criterion, index) => (
                         <span
                           key={index}
                           className="px-2 py-1 bg-primary-100 text-primary-800 text-xs rounded-full"

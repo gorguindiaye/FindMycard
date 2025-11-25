@@ -33,13 +33,12 @@ const Notifications: React.FC = () => {
 
   const markAsRead = async (notificationId: number) => {
     try {
-      // For now, just update local state since the API might not have this endpoint
+      await apiService.markNotificationAsRead(notificationId);
       setNotifications(prev =>
         prev.map(notif =>
           notif.id === notificationId ? { ...notif, is_read: true } : notif
         )
       );
-      toast.success('Notification marquée comme lue');
     } catch (err: any) {
       console.error('Erreur lors de la mise à jour:', err);
       toast.error('Erreur lors de la mise à jour');
@@ -48,10 +47,10 @@ const Notifications: React.FC = () => {
 
   const markAllAsRead = async () => {
     try {
+      await apiService.markAllNotificationsAsRead();
       setNotifications(prev =>
         prev.map(notif => ({ ...notif, is_read: true }))
       );
-      toast.success('Toutes les notifications marquées comme lues');
     } catch (err: any) {
       console.error('Erreur lors de la mise à jour:', err);
       toast.error('Erreur lors de la mise à jour');
@@ -65,6 +64,7 @@ const Notifications: React.FC = () => {
       case 'match_confirmed':
         return <CheckCircle className="h-5 w-5 text-green-500" />;
       case 'item_returned':
+      case 'item_handed_over':
         return <CheckCircle className="h-5 w-5 text-purple-500" />;
       default:
         return <Bell className="h-5 w-5 text-gray-500" />;
@@ -78,6 +78,7 @@ const Notifications: React.FC = () => {
       case 'match_confirmed':
         return 'Correspondance confirmée';
       case 'item_returned':
+      case 'item_handed_over':
         return 'Objet rendu';
       default:
         return type;
@@ -233,24 +234,29 @@ const Notifications: React.FC = () => {
                           <div>
                             <p className="font-medium text-gray-900">Objet perdu</p>
                             <p className="text-gray-600">
-                              {notification.match.lost_item.first_name} {notification.match.lost_item.last_name}
+                              {notification.match?.lost_item?.first_name} {notification.match?.lost_item?.last_name}
                             </p>
                             <p className="text-gray-600">
-                              {notification.match.lost_item.document_type.name}
+                              {notification.match?.lost_item?.document_type?.name}
                             </p>
                           </div>
                           <div>
                             <p className="font-medium text-gray-900">Objet trouvé</p>
                             <p className="text-gray-600">
-                              Trouvé le {formatDate(notification.match.found_item.found_date)}
+                              {notification.match?.found_item?.found_date
+                                ? `Trouvé le ${formatDate(notification.match.found_item.found_date)}`
+                                : 'Date inconnue'}
                             </p>
                             <p className="text-gray-600">
-                              {notification.match.found_item.found_location}
+                              {notification.match?.found_item?.found_location || 'Non renseigné'}
                             </p>
                           </div>
                         </div>
                         <div className="mt-2 text-sm text-gray-600">
-                          <span className="font-medium">Score de confiance:</span> {(notification.match.confidence_score * 100).toFixed(1)}%
+                          <span className="font-medium">Score de confiance:</span>{' '}
+                          {notification.match?.confidence_score !== undefined
+                            ? `${(notification.match.confidence_score * 100).toFixed(1)}%`
+                            : 'N/A'}
                         </div>
                       </div>
                     )}

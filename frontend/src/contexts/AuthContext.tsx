@@ -2,15 +2,19 @@ import React, { createContext, useContext, useState, useEffect, ReactNode } from
 import apiService from '../services/api.ts';
 import { toast } from 'react-toastify';
 
+export type UserRole = 'citoyen' | 'admin_public' | 'admin_plateforme';
+
 interface User {
   id: number;
+  username: string;
   email: string;
   first_name: string;
   last_name: string;
+  role: UserRole;
   is_admin: boolean;
-  role: string;
-  is_perdeur: boolean;
-  is_trouveur: boolean;
+  is_admin_plateforme: boolean;
+  is_admin_public: boolean;
+  is_citoyen: boolean;
 }
 
 interface AuthContextType {

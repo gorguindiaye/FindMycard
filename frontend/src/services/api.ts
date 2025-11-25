@@ -92,6 +92,10 @@ class ApiService {
     return this.api.delete(`/lost-items/${id}/`);
   }
 
+  async confirmLostItemReceipt(id: number): Promise<AxiosResponse> {
+    return this.api.post(`/lost-items/${id}/confirm-receipt/`);
+  }
+
   // Objets trouvés
   async getFoundItems(): Promise<AxiosResponse> {
     return this.api.get('/found-items/');
@@ -111,9 +115,25 @@ class ApiService {
     return this.api.delete(`/found-items/${id}/`);
   }
 
+  async respondToFoundItem(id: number, payload: { message?: string; drop_off_point?: string; availability?: string }): Promise<AxiosResponse> {
+    return this.api.post(`/found-items/${id}/respond/`, payload);
+  }
+
   // Correspondances
   async getMatches(): Promise<AxiosResponse> {
     return this.api.get('/matches/');
+  }
+
+  async validateMatch(id: number, payload?: { reason?: string }): Promise<AxiosResponse> {
+    return this.api.post(`/matches/${id}/validate/`, payload);
+  }
+
+  async invalidateMatch(id: number, payload: { reason: string }): Promise<AxiosResponse> {
+    return this.api.post(`/matches/${id}/invalidate/`, payload);
+  }
+
+  async requestAuthCheck(id: number, payload?: { notes?: string }): Promise<AxiosResponse> {
+    return this.api.post(`/matches/${id}/request-auth-check/`, payload);
   }
 
   // Notifications
@@ -123,6 +143,35 @@ class ApiService {
 
   async getUnreadNotificationsCount(): Promise<AxiosResponse> {
     return this.api.get('/notifications/unread_count/');
+  }
+
+  async markNotificationAsRead(id: number): Promise<AxiosResponse> {
+    return this.api.post(`/notifications/${id}/mark_as_read/`);
+  }
+
+  async markAllNotificationsAsRead(): Promise<AxiosResponse> {
+    return this.api.post('/notifications/mark_all_as_read/');
+  }
+
+  async sendNotification(payload: { user_id: number; title: string; message: string; match_id?: number }): Promise<AxiosResponse> {
+    return this.api.post('/notifications/send/', payload);
+  }
+
+  // Verification requests (admin public)
+  async getVerificationRequests(): Promise<AxiosResponse> {
+    return this.api.get('/verification-requests/');
+  }
+
+  async confirmVerificationRequest(id: number, payload?: { reason?: string }): Promise<AxiosResponse> {
+    return this.api.post(`/verification-requests/${id}/confirm/`, payload);
+  }
+
+  async rejectVerificationRequest(id: number, payload: { reason: string }): Promise<AxiosResponse> {
+    return this.api.post(`/verification-requests/${id}/reject/`, payload);
+  }
+
+  async superviseVerificationRequest(id: number, payload?: { notes?: string }): Promise<AxiosResponse> {
+    return this.api.post(`/verification-requests/${id}/supervise-restitution/`, payload);
   }
 
   // Utilisateurs
@@ -146,6 +195,19 @@ class ApiService {
 
   async getHistoriqueByUser(userId: number): Promise<AxiosResponse> {
     return this.api.get(`/historique/user/${userId}/`);
+  }
+
+  // Admin methods
+  async getUsers(): Promise<AxiosResponse> {
+    return this.api.get('/users/');
+  }
+
+  async updateUserStatus(userId: number, isActive: boolean): Promise<AxiosResponse> {
+    return this.api.patch(`/users/${userId}/`, { is_active: isActive });
+  }
+
+  async deleteUser(userId: number): Promise<AxiosResponse> {
+    return this.api.delete(`/users/${userId}/`);
   }
 }
 
