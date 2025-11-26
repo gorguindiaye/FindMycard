@@ -30,6 +30,8 @@ import logging
 logger = logging.getLogger(__name__)
 
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
+    email = serializers.CharField()
+    password = serializers.CharField()
     username_field = 'email'
 
     def validate(self, attrs):
@@ -103,6 +105,7 @@ class DocumentTypeViewSet(viewsets.ReadOnlyModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
 
 class LostItemViewSet(viewsets.ModelViewSet):
+    queryset = LostItem.objects.all()
     serializer_class = LostItemSerializer
     permission_classes = [IsOwnerOrAdminPermission.for_role('admin_public')]
 
@@ -161,6 +164,7 @@ class LostItemViewSet(viewsets.ModelViewSet):
         return Response({'message': 'Restitution confirmée'}, status=status.HTTP_200_OK)
 
 class FoundItemViewSet(viewsets.ModelViewSet):
+    queryset = FoundItem.objects.all()
     serializer_class = FoundItemSerializer
     permission_classes = [IsOwnerOrAdminPermission.for_role('admin_public')]
 
@@ -269,6 +273,7 @@ class FoundItemViewSet(viewsets.ModelViewSet):
         return Response({'message': 'Réponse enregistrée'}, status=status.HTTP_200_OK)
 
 class MatchViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = Match.objects.all()
     serializer_class = MatchSerializer
     permission_classes = [IsOwnerOrAdminPermission.for_role('admin_public')]
 
@@ -476,6 +481,7 @@ class MatchViewSet(viewsets.ReadOnlyModelViewSet):
         return Response({'message': 'Demande de vérification transmise'}, status=status.HTTP_200_OK)
 
 class NotificationViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = Notification.objects.all()
     serializer_class = NotificationSerializer
     permission_classes = [IsOwnerOrAdminPermission.for_role('admin_public')]
 
@@ -699,6 +705,7 @@ class VerificationRequestViewSet(viewsets.ModelViewSet):
         return Response({'message': 'Supervision enregistrée'}, status=status.HTTP_200_OK)
 
 class UserViewSet(viewsets.ModelViewSet):
+    queryset = CustomUser.objects.all()
     serializer_class = UserSerializer
     permission_classes = [permissions.IsAuthenticated]
 

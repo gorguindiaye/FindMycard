@@ -1,29 +1,23 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
-from .views import (
-    RegisterView, UserView, DocumentTypeViewSet, LostItemViewSet,
-    FoundItemViewSet, MatchViewSet, NotificationViewSet, CustomTokenObtainPairView,
-    OCRAnalyseView, HomeView, UserViewSet, HistoriqueView, VerificationRequestViewSet
-)
+from . import views
 
 router = DefaultRouter()
-router.register(r'document-types', DocumentTypeViewSet, basename='document-types')
-router.register(r'lost-items', LostItemViewSet, basename='lost-item')
-router.register(r'found-items', FoundItemViewSet, basename='found-item')
-router.register(r'matches', MatchViewSet, basename='match')
-router.register(r'notifications', NotificationViewSet, basename='notification')
-router.register(r'users', UserViewSet, basename='user')
-router.register(r'verification-requests', VerificationRequestViewSet, basename='verification-request')
+router.register(r'users', views.UserViewSet)
+router.register(r'lost-items', views.LostItemViewSet)
+router.register(r'found-items', views.FoundItemViewSet)
+router.register(r'matches', views.MatchViewSet)
+router.register(r'notifications', views.NotificationViewSet)
+router.register(r'verification-requests', views.VerificationRequestViewSet)
+router.register(r'document-types', views.DocumentTypeViewSet)
+
 
 urlpatterns = [
-    path('', HomeView.as_view(), name='home'),
     path('', include(router.urls)),
-    path('register/', RegisterView.as_view(), name='register'),
-    path('users/me/', UserView.as_view(), name='user_me'),
-    path('token/', CustomTokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-    path('auth/user/', UserView.as_view(), name='user'),
-    path('ocr-analyse/', OCRAnalyseView.as_view(), name='ocr_analyse'),
-    path('historique/', HistoriqueView.as_view(), name='historique'),
+    path('auth/', include('djoser.urls')),
+    path('auth/', include('djoser.urls.jwt')),
+    path('auth/user/', views.UserView.as_view(), name='current_user'),
+    path('register/', views.RegisterView.as_view(), name='register'),
+    path('token/', views.CustomTokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('token/refresh/', views.TokenRefreshView.as_view(), name='token_refresh'),
 ]

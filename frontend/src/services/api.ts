@@ -209,6 +209,22 @@ class ApiService {
   async deleteUser(userId: number): Promise<AxiosResponse> {
     return this.api.delete(`/users/${userId}/`);
   }
+
+  // Admin manual matching
+  async getAdminLostItems(): Promise<AxiosResponse> {
+    return this.api.get('/admin-matching/lost_items/');
+  }
+
+  async getAdminFoundItems(): Promise<AxiosResponse> {
+    return this.api.get('/admin-matching/found_items/');
+  }
+
+  async createManualMatch(lostItemId: number, foundItemId: number): Promise<AxiosResponse> {
+    return this.api.post('/admin-matching/create_match/', {
+      lost_item_id: lostItemId,
+      found_item_id: foundItemId
+    });
+  }
 }
 
 const apiService = new ApiService();

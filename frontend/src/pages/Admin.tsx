@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Users, FileText, BarChart3, Settings, Shield, AlertTriangle, CheckCircle, Trash2, UserCheck, UserX } from 'lucide-react';
+import { Users, FileText, BarChart3, Settings, Shield, AlertTriangle, CheckCircle, Trash2, UserCheck, UserX, Link } from 'lucide-react';
 import { toast } from 'react-toastify';
 import Loader from '../components/Loader.tsx';
 import apiService from '../services/api.ts';
@@ -27,10 +27,36 @@ interface User {
   last_login?: string;
 }
 
+interface LostItem {
+  id: number;
+  first_name: string;
+  last_name: string;
+  document_type: { name: string };
+  document_number: string;
+  lost_date: string;
+  lost_location: string;
+  status: string;
+}
+
+interface FoundItem {
+  id: number;
+  first_name: string;
+  last_name: string;
+  document_type: { name: string };
+  document_number: string;
+  found_date: string;
+  found_location: string;
+  status: string;
+}
+
 const Admin: React.FC = () => {
   const [activeTab, setActiveTab] = useState('dashboard');
   const [stats, setStats] = useState<AdminStats | null>(null);
   const [users, setUsers] = useState<User[]>([]);
+  const [lostItems, setLostItems] = useState<LostItem[]>([]);
+  const [foundItems, setFoundItems] = useState<FoundItem[]>([]);
+  const [selectedLostItem, setSelectedLostItem] = useState<LostItem | null>(null);
+  const [selectedFoundItem, setSelectedFoundItem] = useState<FoundItem | null>(null);
   const [loading, setLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState<string | null>(null);
 
@@ -41,21 +67,36 @@ const Admin: React.FC = () => {
       fetchUsers();
     } else if (activeTab === 'reports') {
       fetchReports();
+    } else if (activeTab === 'matching') {
+      fetchMatchingData();
     }
   }, [activeTab]);
 
   const fetchStats = async () => {
     try {
       setLoading(true);
+      console.log('Fetching stats data...');
 
       // Fetch data from existing endpoints using apiService
-      const [usersResponse, lostResponse, foundResponse, matchesResponse, statsResponse] = await Promise.all([
-        apiService.getUsers(),
-        apiService.getLostItems(),
-        apiService.getFoundItems(),
-        apiService.getMatches(),
-        apiService.getUsers().then(() => apiService.getCurrentUser()), // For stats, we'll use user count from users endpoint
-      ]);
+      console.log('Fetching users...');
+      const usersResponse = await apiService.getUsers();
+      console.log('Users response:', usersResponse);
+
+      console.log('Fetching lost items...');
+      const lostResponse = await apiService.getLostItems();
+      console.log('Lost items response:', lostResponse);
+
+      console.log('Fetching found items...');
+      const foundResponse = await apiService.getFoundItems();
+      console.log('Found items response:', foundResponse);
+
+      console.log('Fetching matches...');
+      const matchesResponse = await apiService.getMatches();
+      console.log('Matches response:', matchesResponse);
+
+      console.log('Fetching current user...');
+      const currentUserResponse = await apiService.getCurrentUser();
+      console.log('Current user response:', currentUserResponse);
 
       setStats({
         total_users: usersResponse.data.count || usersResponse.data.results?.length || 0,
@@ -65,8 +106,17 @@ const Admin: React.FC = () => {
         total_matches: matchesResponse.data.count || matchesResponse.data.results?.length || 0,
         pending_reports: 0, // Would come from a reports endpoint
       });
-    } catch (error) {
+
+      console.log('Stats loaded successfully');
+    } catch (error: any) {
       console.error('Erreur lors du chargement des statistiques:', error);
+      if (error.response) {
+        console.error('Error response:', error.response.status, error.response.data);
+      } else if (error.request) {
+        console.error('Error request:', error.request);
+      } else {
+        console.error('Error message:', error.message);
+      }
       toast.error('Erreur lors du chargement des statistiques');
     } finally {
       setLoading(false);
@@ -96,6 +146,54 @@ const Admin: React.FC = () => {
       toast.error('Erreur lors du chargement des rapports');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const fetchMatchingData = async () => {
+    try {
+      setLoading(true);
+      console.log('Fetching matching data...');
+
+      // Fetch lost items
+      console.log('Fetching lost items...');
+      const lostResponse = await apiService.getLostItems();
+      console.log('Lost items response:', lostResponse);
+      setLostItems(lostResponse.data.results || lostResponse.data);
+
+      // Fetch found items
+      console.log('Fetching found items...');
+      const foundResponse = await apiService.getFoundItems();
+      console.log('Found items response:', foundResponse);
+      setFoundItems(foundResponse.data.results || foundResponse.data);
+
+      console.log('Matching data loaded successfully');
+    } catch (error: any) {
+      console.error('Erreur lors du chargement des données de matching:', error);
+      if (error.response) {
+        console.error('Error response:', error.response.status, error.response.data);
+      } else if (error.request) {
+        console.error('Error request:', error.request);
+      } else {
+        console.error('Error message:', error.message);
+      }
+      toast.error('Erreur lors du chargement des données de matching');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const createManualMatch = async (lostItemId: number, foundItemId: number) => {
+    try {
+      setActionLoading(`match-${lostItemId}-${foundItemId}`);
+      await apiService.createManualMatch(lostItemId, foundItemId);
+      toast.success('Correspondance créée avec succès');
+      // Refresh data
+      fetchMatchingData();
+    } catch (error) {
+      console.error('Erreur lors de la création de la correspondance:', error);
+      toast.error('Erreur lors de la création de la correspondance');
+    } finally {
+      setActionLoading(null);
     }
   };
 
@@ -141,6 +239,7 @@ const Admin: React.FC = () => {
   const tabs = [
     { id: 'dashboard', name: 'Tableau de bord', icon: BarChart3 },
     { id: 'users', name: 'Utilisateurs', icon: Users },
+    { id: 'matching', name: 'Correspondances', icon: Link },
     { id: 'reports', name: 'Rapports', icon: FileText },
     { id: 'settings', name: 'Paramètres', icon: Settings },
   ];
@@ -373,6 +472,90 @@ const Admin: React.FC = () => {
                         <AlertTriangle className="h-12 w-12 text-gray-400 mx-auto mb-4" />
                         <h3 className="text-lg font-medium text-gray-900 mb-2">Aucun rapport</h3>
                         <p className="text-gray-500">Il n'y a actuellement aucun rapport ou signalement à traiter.</p>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {activeTab === 'matching' && (
+                  <div className="space-y-6">
+                    <div className="bg-white shadow-sm border border-gray-200 rounded-lg">
+                      <div className="px-6 py-4 border-b border-gray-200">
+                        <h3 className="text-lg font-medium text-gray-900">Correspondances manuelles</h3>
+                        <p className="text-sm text-gray-600">Créez des correspondances entre objets perdus et trouvés</p>
+                      </div>
+                      <div className="p-6">
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                          {/* Lost Items */}
+                          <div>
+                            <h4 className="text-md font-medium text-gray-900 mb-4">Objets perdus</h4>
+                            <div className="space-y-3 max-h-96 overflow-y-auto">
+                              {lostItems.map((item) => (
+                                <div key={item.id} className="bg-gray-50 p-4 rounded-lg border">
+                                  <div className="flex justify-between items-start">
+                                    <div>
+                                      <p className="font-medium text-gray-900">{item.first_name} {item.last_name}</p>
+                                      <p className="text-sm text-gray-600">{item.document_type.name}: {item.document_number}</p>
+                                      <p className="text-xs text-gray-500">Perdu le {formatDate(item.lost_date)} à {item.lost_location}</p>
+                                    </div>
+                                    <button
+                                      onClick={() => setSelectedLostItem(item)}
+                                      className="text-primary-600 hover:text-primary-800 text-sm font-medium"
+                                    >
+                                      Sélectionner
+                                    </button>
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+
+                          {/* Found Items */}
+                          <div>
+                            <h4 className="text-md font-medium text-gray-900 mb-4">Objets trouvés</h4>
+                            <div className="space-y-3 max-h-96 overflow-y-auto">
+                              {foundItems.map((item) => (
+                                <div key={item.id} className="bg-gray-50 p-4 rounded-lg border">
+                                  <div className="flex justify-between items-start">
+                                    <div>
+                                      <p className="font-medium text-gray-900">{item.first_name} {item.last_name}</p>
+                                      <p className="text-sm text-gray-600">{item.document_type.name}: {item.document_number}</p>
+                                      <p className="text-xs text-gray-500">Trouvé le {formatDate(item.found_date)} à {item.found_location}</p>
+                                    </div>
+                                    <button
+                                      onClick={() => setSelectedFoundItem(item)}
+                                      className="text-primary-600 hover:text-primary-800 text-sm font-medium"
+                                    >
+                                      Sélectionner
+                                    </button>
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Match Button */}
+                        {selectedLostItem && selectedFoundItem && (
+                          <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                            <h4 className="text-md font-medium text-gray-900 mb-2">Créer une correspondance</h4>
+                            <p className="text-sm text-gray-600 mb-4">
+                              Correspondance entre {selectedLostItem.first_name} {selectedLostItem.last_name} et {selectedFoundItem.first_name} {selectedFoundItem.last_name}
+                            </p>
+                            <button
+                              onClick={() => createManualMatch(selectedLostItem.id, selectedFoundItem.id)}
+                              disabled={actionLoading === `match-${selectedLostItem.id}-${selectedFoundItem.id}`}
+                              className="inline-flex items-center px-4 py-2 bg-primary-600 text-white text-sm font-medium rounded-md hover:bg-primary-700 disabled:opacity-50"
+                            >
+                              {actionLoading === `match-${selectedLostItem.id}-${selectedFoundItem.id}` ? (
+                                <Loader className="h-4 w-4 mr-2" />
+                              ) : (
+                                <Link className="h-4 w-4 mr-2" />
+                              )}
+                              Créer la correspondance
+                            </button>
+                          </div>
+                        )}
                       </div>
                     </div>
                   </div>
